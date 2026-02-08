@@ -3,137 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>iBet Analytics</title>
+    <title>iBet Elite</title>
     
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/6556/6556100.png">
-    <meta name="apple-mobile-web-app-title" content="iBet Pro">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/yourusername/ibet-repo/main/icon.png"> <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="iBet Elite">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica; -webkit-tap-highlight-color: transparent; }
-        .ios-blur { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(255,255,255,0.8); }
-        .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 85px; border-top: 0.5px solid #d1d1d1; padding-bottom: 20px; }
-        .selected-bet { background-color: #007AFF !important; color: white !important; border-color: #007AFF !important; }
+        body { 
+            font-family: -apple-system, system-ui, sans-serif; 
+            background-color: #0A0A0A; /* Sfondo scuro per un look premium */
+            color: #E0E0E0;
+        }
+        
+        /* Barra menu fissa in basso con effetto blur scuro */
+        .tab-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            height: 90px; 
+            background: rgba(10, 10, 10, 0.8); /* Sfondo più scuro per il blur */
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-top: 0.5px solid rgba(50, 50, 50, 0.5);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 100;
+        }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .bet-btn {
+            background-color: #2A2A2A;
+            color: #E0E0E0;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid #3A3A3A;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        .bet-btn.active { 
+            background: linear-gradient(135deg, #007AFF, #00C6FF); /* Gradiente blu vivido */
+            color: white; 
+            border-color: #007AFF;
+            transform: scale(1.05); /* Piccolo effetto hover */
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
+        }
+
+        .match-card {
+            background-color: #1A1A1A;
+            border: 1px solid #3A3A3A;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease-in-out;
+        }
+        .match-card:hover { transform: translateY(-3px); }
+
+        .scroll-gradient {
+            background: linear-gradient(to right, #0A0A0A, rgba(10, 10, 10, 0) 20%, rgba(10, 10, 10, 0) 80%, #0A0A0A);
+        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; } /* Firefox */
     </style>
 </head>
-<body class="bg-[#F2F2F7] pb-40">
+<body class="pb-32">
 
-    <div class="sticky top-0 z-20 bg-[#F2F2F7]/95 backdrop-blur-md p-5 pb-2">
-        <h1 class="text-3xl font-extrabold tracking-tight mb-3">Scommesse</h1>
-        <div class="bg-gray-200/50 rounded-xl flex items-center p-2 px-3">
-            <i class="fa-solid fa-magnifying-glass text-gray-400 mr-2 text-sm"></i>
-            <input type="text" id="search" placeholder="Cerca squadra o campionato..." class="bg-transparent w-full outline-none text-md">
+    <div id="home" class="section active">
+        <div class="p-6 pt-12 sticky top-0 z-20 bg-[#0A0A0A]/80 backdrop-blur-lg border-b border-gray-800">
+            <h1 class="text-4xl font-extrabold text-white mb-4">iBet Elite</h1>
+            <div class="mt-4 bg-[#2A2A2A] p-2.5 rounded-xl flex items-center shadow-inner">
+                <i class="fa-solid fa-magnifying-glass text-gray-500 mx-2 text-lg"></i>
+                <input type="text" placeholder="Cerca squadra o mercato..." class="bg-transparent outline-none w-full text-white text-md">
+            </div>
+            
+            <div class="flex space-x-3 mt-4 overflow-x-auto no-scrollbar pb-2">
+                <button class="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-5 py-2 rounded-full text-xs font-bold shadow-md">Tutti</button>
+                <button class="bg-[#2A2A2A] border border-gray-700 text-gray-300 px-5 py-2 rounded-full text-xs font-bold shadow-sm">Serie A</button>
+                <button class="bg-[#2A2A2A] border border-gray-700 text-gray-300 px-5 py-2 rounded-full text-xs font-bold shadow-sm">Premier</button>
+                <button class="bg-[#2A2A2A] border border-gray-700 text-gray-300 px-5 py-2 rounded-full text-xs font-bold shadow-sm">La Liga</button>
+            </div>
         </div>
-        
-        <div class="flex space-x-3 mt-4 overflow-x-auto no-scrollbar pb-2">
-            <button class="bg-black text-white px-4 py-1.5 rounded-full text-xs font-bold">Tutti</button>
-            <button class="bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-bold">Serie A</button>
-            <button class="bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-bold">Premier</button>
-            <button class="bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-bold">La Liga</button>
+
+        <div id="match-list" class="p-4 space-y-5">
+            <div class="match-card p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-semibold text-gray-400 uppercase">Serie A - 20:45</span>
+                    <span class="text-xs bg-green-700/30 text-green-400 px-2 py-1 rounded-lg font-mono">LIVE</span>
+                </div>
+                <div class="flex justify-between items-center mb-5">
+                    <div class="text-center">
+                        <span class="font-bold text-xl block text-white">Juventus</span>
+                        <span class="text-[10px] text-green-500">W W D W W</span>
+                    </div>
+                    <span class="text-gray-600 font-light text-xl">VS</span>
+                    <div class="text-center">
+                        <span class="font-bold text-xl block text-white">Milan</span>
+                        <span class="text-[10px] text-red-500">L D L W D</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-2 mb-3">
+                    <button onclick="addBet(this, 'Juve-Milan', '1', 1.85)" class="bet-btn py-3 rounded-lg"><span class="block text-[10px] text-gray-400">1</span><span class="font-bold text-lg">1.85</span></button>
+                    <button onclick="addBet(this, 'Juve-Milan', 'X', 3.40)" class="bet-btn py-3 rounded-lg"><span class="block text-[10px] text-gray-400">X</span><span class="font-bold text-lg">3.40</span></button>
+                    <button onclick="addBet(this, 'Juve-Milan', '2', 4.20)" class="bet-btn py-3 rounded-lg"><span class="block text-[10px] text-gray-400">2</span><span class="font-bold text-lg">4.20</span></button>
+                </div>
+
+                <div class="grid grid-cols-4 gap-1">
+                    <button onclick="addBet(this, 'Juve-Milan', '1X', 1.25)" class="bet-btn py-2 rounded-md text-xs"><span class="block text-gray-400">1X</span><span class="font-bold">1.25</span></button>
+                    <button onclick="addBet(this, 'Juve-Milan', 'GG', 1.70)" class="bet-btn py-2 rounded-md text-xs"><span class="block text-gray-400">GG</span><span class="font-bold">1.70</span></button>
+                    <button onclick="addBet(this, 'Juve-Milan', 'O2.5', 1.80)" class="bet-btn py-2 rounded-md text-xs"><span class="block text-gray-400">O2.5</span><span class="font-bold">1.80</span></button>
+                    <button onclick="addBet(this, 'Juve-Milan', 'U2.5', 2.05)" class="bet-btn py-2 rounded-md text-xs"><span class="block text-gray-400">U2.5</span><span class="font-bold">2.05</span></button>
+                </div>
+            </div>
+            </div>
+    </div>
+
+    <div id="stats" class="section">
+        <div class="p-6 pt-12">
+            <h1 class="text-3xl font-bold text-white mb-4">Statistiche Profonde</h1>
+            <p class="text-gray-400 text-sm">Analizza le ultime 5 partite e la forma delle squadre.</p>
+            
+            <div class="mt-8 bg-[#1A1A1A] p-5 rounded-2xl border border-gray-700 shadow-lg">
+                <h2 class="text-xl font-bold text-white mb-4">Inter vs Milan - Dettagli</h2>
+                <div class="space-y-3">
+                    <div>
+                        <p class="font-semibold text-blue-400">Inter (Casa)</p>
+                        <ul class="flex space-x-2 mt-1">
+                            <li class="bg-green-600/30 text-green-400 px-2 py-1 rounded-md text-xs">V 2-0</li>
+                            <li class="bg-green-600/30 text-green-400 px-2 py-1 rounded-md text-xs">V 1-0</li>
+                            <li class="bg-gray-600/30 text-gray-400 px-2 py-1 rounded-md text-xs">P 1-1</li>
+                            <li class="bg-green-600/30 text-green-400 px-2 py-1 rounded-md text-xs">V 3-1</li>
+                            <li class="bg-red-600/30 text-red-400 px-2 py-1 rounded-md text-xs">S 0-1</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-red-400">Milan (Trasferta)</p>
+                        <ul class="flex space-x-2 mt-1">
+                            <li class="bg-gray-600/30 text-gray-400 px-2 py-1 rounded-md text-xs">P 0-0</li>
+                            <li class="bg-red-600/30 text-red-400 px-2 py-1 rounded-md text-xs">S 0-2</li>
+                            <li class="bg-green-600/30 text-green-400 px-2 py-1 rounded-md text-xs">V 2-1</li>
+                            <li class="bg-red-600/30 text-red-400 px-2 py-1 rounded-md text-xs">S 1-3</li>
+                            <li class="bg-green-600/30 text-green-400 px-2 py-1 rounded-md text-xs">V 1-0</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <main id="matchList" class="p-4 space-y-4">
-        </main>
+    <div id="profile" class="section">
+        <div class="p-6 pt-12">
+            <h1 class="text-3xl font-bold text-white mb-4">Il Mio Profilo</h1>
+            <div class="mt-8 bg-[#1A1A1A] p-5 rounded-2xl border border-gray-700 shadow-lg text-center">
+                <i class="fa-solid fa-user-circle text-blue-500 text-6xl mb-4"></i>
+                <p class="text-xl font-bold text-white">Benvenuto, Scommettitore!</p>
+                <p class="text-gray-400 mt-2">Saldo Attuale: <span class="text-green-500 font-bold">€ 1,250.75</span></p>
+                <button class="mt-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-full shadow-md font-semibold">Deposita Fondi</button>
+            </div>
+        </div>
+    </div>
 
-    <div id="slip" class="fixed bottom-24 left-4 right-4 bg-white rounded-3xl shadow-2xl p-5 transform transition-all translate-y-full opacity-0">
-        <div class="flex justify-between items-start mb-2">
+    <div id="slip" class="fixed bottom-24 left-4 right-4 bg-gradient-to-r from-blue-700 to-blue-500 text-white p-5 rounded-2xl shadow-2xl hidden z-50 transform translate-y-full opacity-0 transition-all duration-300">
+        <div class="flex justify-between items-center mb-2">
             <div>
-                <h3 class="font-bold text-lg text-blue-600">Analisi Schedina</h3>
-                <p id="advice" class="text-[10px] text-gray-400 italic max-w-[200px] leading-tight"></p>
+                <span class="text-xs opacity-80 uppercase font-bold">Probabilità Vincita Reale</span>
+                <p id="prob-display" class="text-3xl font-black">0%</p>
             </div>
             <div class="text-right">
-                <span id="totalOdds" class="text-xs bg-gray-100 px-2 py-1 rounded-md font-mono">Quota: 1.00</span>
+                <p id="odds-display" class="text-xl font-bold">Quota: 1.00</p>
             </div>
         </div>
-        <div class="flex justify-between items-end mt-4">
-            <div>
-                <p class="text-xs text-gray-500 uppercase font-bold">Probabilità Vincita</p>
-                <p id="probVal" class="text-3xl font-black text-black">0%</p>
-            </div>
-            <button class="bg-[#007AFF] text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-blue-200">Gioca</button>
-        </div>
+        <p id="advice-display" class="text-xs italic text-blue-100 mt-2 leading-tight"></p>
+        <button class="mt-4 w-full bg-white text-blue-700 px-6 py-3 rounded-xl font-bold shadow-lg">Piazza Scommessa</button>
     </div>
 
-    <nav class="tab-bar ios-blur flex justify-around items-center z-30">
-        <div class="flex flex-col items-center text-[#007AFF]"><i class="fa-solid fa-house text-xl"></i><span class="text-[10px] mt-1">Home</span></div>
-        <div class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-chart-simple text-xl"></i><span class="text-[10px] mt-1">Statistiche</span></div>
-        <div class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-receipt text-xl"></i><span class="text-[10px] mt-1">Le mie giocate</span></div>
-        <div class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-user text-xl"></i><span class="text-[10px] mt-1">Profilo</span></div>
+    <nav class="tab-bar">
+        <button id="nav-home" onclick="showSection('home')" class="flex flex-col items-center justify-center text-blue-500 w-1/4">
+            <i class="fa-solid fa-house text-xl mb-1"></i><span class="text-[10px] font-semibold">Home</span>
+        </button>
+        <button id="nav-stats" onclick="showSection('stats')" class="flex flex-col items-center justify-center text-gray-500 w-1/4">
+            <i class="fa-solid fa-chart-line text-xl mb-1"></i><span class="text-[10px] font-semibold">Stats</span>
+        </button>
+        <button id="nav-profile" onclick="showSection('profile')" class="flex flex-col items-center justify-center text-gray-500 w-1/4">
+            <i class="fa-solid fa-user text-xl mb-1"></i><span class="text-[10px] font-semibold">Profilo</span>
+        </button>
     </nav>
 
     <script>
-        const matches = [
-            { id: 1, league: 'Serie A', home: 'Inter', away: 'Milan', odds: { '1': 1.85, 'X': 3.40, '2': 4.20, '1X': 1.22, 'X2': 1.95, 'GG': 1.65, 'NG': 2.10, 'O2.5': 1.75, 'U2.5': 2.00 } },
-            { id: 2, league: 'Premier League', home: 'Arsenal', away: 'Liverpool', odds: { '1': 2.30, 'X': 3.50, '2': 3.00, '1X': 1.38, 'X2': 1.62, 'GG': 1.55, 'NG': 2.30, 'O2.5': 1.60, 'U2.5': 2.25 } }
-        ];
+        let selectedBets = {}; // Usiamo un oggetto per gestire le selezioni uniche per partita
+        let currentTotalOdds = 1.0;
+        const bookmakerMarginFactor = 0.93; // Margine medio del bookmaker (7%)
 
-        let selectedBets = [];
-
-        function renderMatches() {
-            const list = document.getElementById('matchList');
-            list.innerHTML = matches.map(m => `
-                <div class="bg-white rounded-[25px] p-5 shadow-sm border border-gray-100">
-                    <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-3">
-                        <span>${m.league.toUpperCase()}</span>
-                        <span class="text-green-500">LIVE</span>
-                    </div>
-                    <div class="flex justify-between items-center mb-5">
-                        <span class="font-bold text-lg">${m.home}</span>
-                        <span class="text-gray-300">vs</span>
-                        <span class="font-bold text-lg">${m.away}</span>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 mb-3">
-                        ${['1','X','2'].map(res => `<button onclick="toggleBet(${m.id}, '${res}', ${m.odds[res]}, this)" class="bg-gray-50 py-3 rounded-xl border border-gray-50 transition-all active:scale-95"><span class="block text-[9px] text-gray-400 font-bold">${res}</span><span class="font-bold">${m.odds[res]}</span></button>`).join('')}
-                    </div>
-                    <div class="grid grid-cols-4 gap-2">
-                        ${['1X','X2','GG','O2.5'].map(res => `<button onclick="toggleBet(${m.id}, '${res}', ${m.odds[res]}, this)" class="bg-blue-50/50 py-2 rounded-lg text-xs font-bold text-blue-600 transition-all active:scale-95">${res} ${m.odds[res]}</button>`).join('')}
-                    </div>
-                </div>
-            `).join('');
+        // Funzione per mostrare le sezioni
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            // Aggiorna lo stato della nav bar
+            document.querySelectorAll('.tab-bar button').forEach(btn => {
+                btn.classList.remove('text-blue-500');
+                btn.classList.add('text-gray-500');
+            });
+            document.getElementById('nav-' + id).classList.remove('text-gray-500');
+            document.getElementById('nav-' + id).classList.add('text-blue-500');
         }
 
-        function toggleBet(matchId, label, odd, el) {
-            const betKey = `${matchId}-${label}`;
-            const index = selectedBets.findIndex(b => b.key === betKey);
-            
-            if (index > -1) {
-                selectedBets.splice(index, 1);
-                el.classList.remove('selected-bet');
-            } else {
-                selectedBets.push({ key: betKey, matchId, odd });
-                el.classList.add('selected-bet');
+        // Funzione per aggiungere/rimuovere scommesse
+        function addBet(btn, matchName, betType, odd) {
+            const betKey = `${matchName}-${betType}`; // Chiave univoca per ogni scommessa
+
+            if (selectedBets[betKey]) { // Se già selezionato, rimuovi
+                delete selectedBets[betKey];
+                btn.classList.remove('active');
+            } else { // Altrimenti aggiungi
+                selectedBets[betKey] = { matchName, betType, odd };
+                btn.classList.add('active');
             }
             updateSlip();
         }
 
+        // Aggiorna il riquadro della schedina in basso
         function updateSlip() {
-            const slip = document.getElementById('slip');
-            if (selectedBets.length > 0) {
-                slip.classList.remove('translate-y-full', 'opacity-0');
-                
-                let totalOdd = selectedBets.reduce((acc, b) => acc * b.odd, 1);
-                // Calcolo probabilità reale con margine banco
-                let prob = (1 / totalOdd) * 100 * Math.pow(0.92, selectedBets.length);
-                
-                document.getElementById('totalOdds').innerText = `Quota: ${totalOdd.toFixed(2)}`;
-                document.getElementById('probVal').innerText = `${prob.toFixed(1)}%`;
-                
-                let advice = prob < 15 ? "⚠️ Rischio alto: prova a coprirti con una Doppia Chance (1X)." : "✅ Schedina ben bilanciata.";
-                if (selectedBets.length > 4) advice = "❗ Troppi eventi: la probabilità crolla. Riduci a 3.";
-                document.getElementById('advice').innerText = advice;
+            currentTotalOdds = 1.0;
+            const slipDisplay = document.getElementById('slip');
+            const betsArray = Object.values(selectedBets); // Converti l'oggetto in array
 
-            } else {
-                slip.classList.add('translate-y-full', 'opacity-0');
+            if (betsArray.length === 0) {
+                slipDisplay.classList.remove('translate-y-0', 'opacity-100');
+                slipDisplay.classList.add('translate-y-full', 'opacity-0');
+                setTimeout(() => slipDisplay.classList.add('hidden'), 300); // Nascondi dopo l'animazione
+                return;
+            }
+
+            // Calcolo Quota Totale e Probabilità
+            betsArray.forEach(bet => {
+                currentTotalOdds *= bet.odd;
+            });
+
+            // Calcolo Probabilità Reale (moltiplicazione delle probabilità individuali, con fattore di aggiustamento)
+            let totalProbability = 1.0;
+            betsArray.forEach(bet => {
+                totalProbability *= (1.0 / bet.odd);
+            });
+            let finalProbability = totalProbability * 100 * Math.pow(bookmakerMarginFactor, betsArray.length);
+
+            document.getElementById('odds-display').innerText = `Quota: ${currentTotalOdds.toFixed(2)}`;
+            document.getElementById('prob-display').innerText = `${Math.min(finalProbability, 99.9).toFixed(1)}%`; // Max 99.9%
+            document.getElementById('advice-display').innerText = getAdvice(finalProbability, betsArray.length);
+
+            if (slipDisplay.classList.contains('hidden')) {
+                slipDisplay.classList.remove('hidden');
+                setTimeout(() => { // Dai il tempo al display di cambiare prima dell'animazione
+                    slipDisplay.classList.remove('translate-y-full', 'opacity-0');
+                    slipDisplay.classList.add('translate-y-0', 'opacity-100');
+                }, 10);
             }
         }
 
-        renderMatches();
+        // Logica di Consigli AI
+        function getAdvice(probability, numBets) {
+            if (numBets === 0) return "Seleziona le tue scommesse!";
+            if (probability < 10) return "⚠️ Rischio Altissimo! Rimuovi un evento o scegli una Doppia Chance.";
+            if (numBets > 4 && probability < 30) return "💡 Troppi eventi in multipla. Riduci a 3-4 per aumentare la probabilità.";
+            if (probability > 60) return "✅ Ottima probabilità! Considera di aumentare la puntata.";
+            return "👍 Schedina bilanciata. Buon potenziale di vincita.";
+        }
+
+        // Inizializza l'interfaccia
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('home');
+            updateSlip(); // Assicurati che la schedina sia nascosta all'avvio
+        });
     </script>
 </body>
 </html>
